@@ -1,0 +1,11 @@
+#!/usr/bin/ruby
+
+require "../lib/ncc_testsuite"
+require "../lib/ncc_testsuite/zypper"
+require "../lib/ncc_testsuite/suse_register"
+
+# Remove all services and repos, even all the disabled ones
+NccTestsuite::Zypper::cleanup
+
+# Destroy NCCcredentials
+NccTestsuite::SuseRegister::cleanup

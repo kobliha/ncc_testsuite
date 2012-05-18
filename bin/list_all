@@ -1,0 +1,19 @@
+#!/usr/bin/ruby
+
+require "../lib/ncc_testsuite"
+require "../lib/ncc_testsuite/zypper"
+
+puts
+puts "All current repositories:"
+puts "========================="
+puts NccTestsuite::Zypper::list_repositories.collect{|repo| repo["name"]}.sort
+
+puts
+puts "All current services:"
+puts "====================="
+puts NccTestsuite::Zypper::list_services.collect{|service| service["name"]}.sort
+
+puts
+puts "All needed patches:"
+puts "==================="
+puts NccTestsuite::Zypper::list_patches('status' => 'Needed').inspect

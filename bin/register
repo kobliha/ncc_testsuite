@@ -1,0 +1,7 @@
+#!/usr/bin/ruby
+
+require "../lib/ncc_testsuite"
+require "../lib/ncc_testsuite/suse_register"
+
+sr = NccTestsuite::SuseRegister.new
+sr.register
