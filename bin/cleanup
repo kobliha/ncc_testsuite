@@ -11,5 +11,5 @@ NccTestsuite::Zypper::cleanup
 # Destroy NCCcredentials
 NccTestsuite::SuseRegister::cleanup
 
-# Remove all installed product RPMs
-NccTestsuite::Product::uninstall_all_product_rpms
+# Remove all installed product RPMs and product files
+NccTestsuite::Product::cleanup
