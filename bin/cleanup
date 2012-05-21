@@ -3,9 +3,13 @@
 require "../lib/ncc_testsuite"
 require "../lib/ncc_testsuite/zypper"
 require "../lib/ncc_testsuite/suse_register"
+require "../lib/ncc_testsuite/product"
 
 # Remove all services and repos, even all the disabled ones
 NccTestsuite::Zypper::cleanup
 
 # Destroy NCCcredentials
 NccTestsuite::SuseRegister::cleanup
+
+# Remove all installed product RPMs
+NccTestsuite::Product::uninstall_all_product_rpms
