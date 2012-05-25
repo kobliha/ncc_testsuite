@@ -21,7 +21,7 @@ class NccTestsuite::Zypper
 
     repositories.each {|repo|
       puts "Removing repository '#{repo["alias"]}'"
-      run("zypper --quiet removerepo '#{repo["alias"]}'")
+      run("zypper --non-interactive --quiet removerepo '#{repo["alias"]}'")
     }
 
     # Check and return whether all repositories have been removed
@@ -38,7 +38,7 @@ class NccTestsuite::Zypper
 
     services.each {|service|
       puts "Removing service '#{service["alias"]}'"
-      run("zypper --quiet removeservice '#{service["alias"]}'")
+      run("zypper --non-interactive --quiet removeservice '#{service["alias"]}'")
     }
 
     # Check and return whether all services have been removed
@@ -65,7 +65,7 @@ class NccTestsuite::Zypper
     patch = {}
 
     # Zypper `patches` does not support XML output
-    run('zypper --quiet patches').split("\n").each {|line|
+    run('zypper --non-interactive --quiet patches').split("\n").each {|line|
       table_index = table_index + 1
       # Skip the first two - table header
       next if table_index < 3
@@ -89,7 +89,7 @@ class NccTestsuite::Zypper
   end
 
   def self.xml_run command
-    command = "zypper --xmlout #{command}"
+    command = "zypper --non-interactive --xmlout #{command}"
     xml = run command
     out = XmlSimple.xml_in(xml)
 
