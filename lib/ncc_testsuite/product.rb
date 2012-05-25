@@ -1,12 +1,14 @@
 class NccTestsuite::Product
   require 'rubygems'
   require 'fileutils'
+  require 'shellwords'
 
   PRODUCTS_DIR = '/etc/products.d/'
   DATA_DIR = File.join(File.dirname(__FILE__),"../../data/products/")
   PRODUCT_DATA_SUFFIX = '.tgz'
   PRODUCT_SUFFIX = '.prod'
   BASE_PRODUCT = 'baseproduct'
+  BASEPRODUCT_FILE = File.join(PRODUCTS_DIR, BASE_PRODUCT)
 
   def self.installed_product_rpms
     cmd = 'rpm -qa | grep release | grep -v release-notes'
@@ -15,7 +17,7 @@ class NccTestsuite::Product
   end
 
   def self.uninstall_rpm rpm
-    cmd = "rpm -e --nodeps '#{rpm}'"
+    cmd = "rpm -e --nodeps " + Shellwords::escape(rpm)
     run cmd
   end
 
@@ -59,16 +61,19 @@ class NccTestsuite::Product
     run cmd
   end
 
-  def self.set_baseproduct product
-    baseproduct_file = File.join(PRODUCTS_DIR, BASE_PRODUCT)
+  def self.baseproduct_exists?
+    File.exists? BASEPRODUCT_FILE
+  end
 
+  # Creates a base-product symlink
+  def self.set_baseproduct product
     begin
-      if File.exists? baseproduct_file
-        puts "Removing old baseproduct file #{baseproduct_file}"
-        File.rm_rf baseproduct_file
+      if baseproduct_exists?
+        puts "Removing old baseproduct file #{BASEPRODUCT_FILE}"
+        File.rm_rf BASEPRODUCT_FILE
       end
     rescue => e
-      raise "Unable to remove file  #{baseproduct_file}: #{e.message}"
+      raise "Unable to remove file  #{BASEPRODUCT_FILE}: #{e.message}"
     end
 
     product_file = File.join(PRODUCTS_DIR, "#{product}#{PRODUCT_SUFFIX}")
@@ -78,9 +83,9 @@ class NccTestsuite::Product
     end
 
     begin
-      File.symlink(product_file, baseproduct_file)
+      File.symlink(product_file, BASEPRODUCT_FILE)
     rescue => e
-      raise "Cannot create base product file #{baseproduct_file} from #{product_file}: #{e.message}"
+      raise "Cannot create base product file #{BASEPRODUCT_FILE} from #{product_file}: #{e.message}"
     end
   end
 

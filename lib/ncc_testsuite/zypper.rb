@@ -1,6 +1,7 @@
 class NccTestsuite::Zypper
   require 'rubygems'
   require 'xmlsimple'
+  require 'shellwords'
 
   # Lists all current repositories (XML output)
   def self.list_repositories
@@ -21,7 +22,7 @@ class NccTestsuite::Zypper
 
     repositories.each {|repo|
       puts "Removing repository '#{repo["alias"]}'"
-      run("zypper --non-interactive --quiet removerepo '#{repo["alias"]}'")
+      run("zypper --non-interactive --quiet removerepo " + Shellwords::escape(repo["alias"]))
     }
 
     # Check and return whether all repositories have been removed
@@ -38,7 +39,7 @@ class NccTestsuite::Zypper
 
     services.each {|service|
       puts "Removing service '#{service["alias"]}'"
-      run("zypper --non-interactive --quiet removeservice '#{service["alias"]}'")
+      run("zypper --non-interactive --quiet removeservice " + Shellwords::escape(service["alias"]))
     }
 
     # Check and return whether all services have been removed

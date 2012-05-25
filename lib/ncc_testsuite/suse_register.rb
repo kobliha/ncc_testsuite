@@ -2,6 +2,7 @@ class NccTestsuite::SuseRegister
   require 'rubygems'
   require 'inifile'
   require 'fileutils'
+  require 'shellwords'
 
   SUSE_REGISTER_CONF = '/etc/zypp/credentials.d/NCCcredentials'
   DEFAULT_CONFIG_FILE = '/etc/ncc_registration.conf'
@@ -32,8 +33,10 @@ class NccTestsuite::SuseRegister
   end
 
   def register
-    email = "-a email='" + @config["Global"]["email"] + "'"
-    regcodes = @config["RegCodes"].collect{|key, value| "-a #{key}='#{value}'"}.join(" ")
+    email = "-a email=" + Shellwords::escape(@config["Global"]["email"])
+    regcodes = @config["RegCodes"].collect{|key, value|
+      "-a " + Shellwords::escape(key) + "=" + Shellwords::escape(value)
+    }.join(" ")
     cmd = "suse_register --restore-repos --force-registration #{email} #{regcodes}"
     puts "Registering system..."
     puts NccTestsuite::SuseRegister::run(cmd)
