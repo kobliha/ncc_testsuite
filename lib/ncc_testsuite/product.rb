@@ -4,7 +4,9 @@ class NccTestsuite::Product
 
   PRODUCTS_DIR = '/etc/products.d/'
   DATA_DIR = File.join(File.dirname(__FILE__),"../../data/products/")
-  PRODUCT_SUFFIX = '.tgz'
+  PRODUCT_DATA_SUFFIX = '.tgz'
+  PRODUCT_SUFFIX = '.prod'
+  BASE_PRODUCT = 'baseproduct'
 
   def self.installed_product_rpms
     cmd = 'rpm -qa | grep release | grep -v release-notes'
@@ -40,7 +42,7 @@ class NccTestsuite::Product
 
   # List all product available for installation
   def self.available_products
-    Dir["#{DATA_DIR}/*#{PRODUCT_SUFFIX}"].collect{|product| File.basename(product, PRODUCT_SUFFIX)}
+    Dir["#{DATA_DIR}/*#{PRODUCT_DATA_SUFFIX}"].collect{|product| File.basename(product, PRODUCT_DATA_SUFFIX)}
   end
 
   # Returns whether a given product is available
@@ -53,8 +55,33 @@ class NccTestsuite::Product
     raise "Product #{product} is not available for installation" unless is_available?(product)
 
     puts "Installing product #{product}"
-    cmd = "tar --directory=/ -xvzf #{DATA_DIR}/#{product}#{PRODUCT_SUFFIX}"
+    cmd = "tar --directory=/ -xvzf #{DATA_DIR}/#{product}#{PRODUCT_DATA_SUFFIX}"
     run cmd
+  end
+
+  def self.set_baseproduct product
+    baseproduct_file = File.join(PRODUCTS_DIR, BASE_PRODUCT)
+
+    begin
+      if File.exists? baseproduct_file
+        puts "Removing old baseproduct file #{baseproduct_file}"
+        File.rm_rf baseproduct_file
+      end
+    rescue => e
+      raise "Unable to remove file  #{baseproduct_file}: #{e.message}"
+    end
+
+    product_file = File.join(PRODUCTS_DIR, "#{product}#{PRODUCT_SUFFIX}")
+
+    unless File.exists? product_file
+      raise "Product file #{product_file} does not exist, cannot create baseproduct"
+    end
+
+    begin
+      File.symlink(product_file, baseproduct_file)
+    rescue => e
+      raise "Cannot create base product file #{baseproduct_file} from #{product_file}: #{e.message}"
+    end
   end
 
   # Does the hard job:
