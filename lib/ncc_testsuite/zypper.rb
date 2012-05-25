@@ -48,7 +48,8 @@ class NccTestsuite::Zypper
 
   # Removes all services and repositories
   def self.cleanup
-    remove_all_services && remove_all_repositories
+    remove_all_services
+    remove_all_repositories
   end
 
   # Lists all patches according to given filter criteria
