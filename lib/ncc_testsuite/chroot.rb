@@ -119,7 +119,7 @@ class NccTestsuite::Chroot
       raise "Cannot remove file #{rpm_db_file}: #{e.message}"
     end
 
-    cmd "chroot #{NccTestsuite::escaped_root_director} rpm --rebuilddb"
+    cmd "chroot #{NccTestsuite::escaped_root_directory} rpm --rebuilddb"
   end
 
   def self.cmd command
