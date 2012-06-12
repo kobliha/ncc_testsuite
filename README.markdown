@@ -51,6 +51,11 @@ In this example, */chroot-1/* is used for the chroot directory.
 
     zypper --root=/chroot-1/ ar --refresh http://download.opensuse.org/distribution/12.1/repo/oss/ openSUSE_12.1_OSS
 
+### Prepare for Installation ###
+
+    mkdir -pv /chroot-1/proc
+    mount --bind /proc/ /chroot-1/proc/
+
 ### Installing the Base Software ####
 
     zypper --root=/chroot-1/ install suseRegister ca-certificates-cacert ca-certificates-mozilla
@@ -58,4 +63,3 @@ In this example, */chroot-1/* is used for the chroot directory.
 ### Prepare the Changed Root ###
 
     ln --force /etc/resolv.conf /chroot-1/etc/
-    mount --bind /proc/ /chroot-1/proc/
