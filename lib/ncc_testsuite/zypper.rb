@@ -14,15 +14,15 @@ class NccTestsuite::Zypper
   end
 
   def self.refresh_services
-    run("zypper --root=#{NccTestsuite::escaped_root_directory} --non-interactive --quiet refresh-services")
+    run("zypper #{global_options} --non-interactive --quiet refresh-services")
   end
 
   def self.refresh_repositories
-    run("zypper --root=#{NccTestsuite::escaped_root_directory} --non-interactive --quiet refresh")
+    run("zypper #{global_options} --non-interactive --quiet refresh")
   end
 
   def self.clean_caches
-    run("zypper --root=#{NccTestsuite::escaped_root_directory} --non-interactive --quiet clean")
+    run("zypper #{global_options} --non-interactive --quiet clean")
   end
 
   # Removes all repositories
@@ -34,7 +34,7 @@ class NccTestsuite::Zypper
 
     repositories.each {|repo|
       puts "Removing repository '#{repo["alias"]}'"
-      run("zypper --root=#{NccTestsuite::escaped_root_directory} --non-interactive --quiet removerepo " + Shellwords::escape(repo["alias"]))
+      run("zypper #{global_options} --non-interactive --quiet removerepo " + Shellwords::escape(repo["alias"]))
     }
 
     # Check and return whether all repositories have been removed
@@ -51,7 +51,7 @@ class NccTestsuite::Zypper
 
     services.each {|service|
       puts "Removing service '#{service["alias"]}'"
-      run("zypper --root=#{NccTestsuite::escaped_root_directory} --non-interactive --quiet removeservice " + Shellwords::escape(service["alias"]))
+      run("zypper #{global_options} --non-interactive --quiet removeservice " + Shellwords::escape(service["alias"]))
     }
 
     # Check and return whether all services have been removed
@@ -78,7 +78,7 @@ class NccTestsuite::Zypper
     patch = {}
 
     # Zypper `patches` does not support XML output
-    run("zypper --root=#{NccTestsuite::escaped_root_directory} --non-interactive --quiet patches").split("\n").each {|line|
+    run("zypper #{global_options} --non-interactive --quiet patches").split("\n").each {|line|
       table_index = table_index + 1
       # Skip the first two - table header
       next if table_index < 3
@@ -102,7 +102,7 @@ class NccTestsuite::Zypper
   end
 
   def self.xml_run command
-    command = "zypper --root=#{NccTestsuite::escaped_root_directory} --non-interactive --xmlout #{command}"
+    command = "zypper #{global_options} --non-interactive --xmlout #{command}"
     xml = run command
     out = XmlSimple.xml_in(xml)
 
@@ -116,6 +116,10 @@ class NccTestsuite::Zypper
   end
 
   private
+
+  def self.global_options
+    " --gpg-auto-import-keys --root=#{NccTestsuite::escaped_root_directory} "
+  end
 
   def self.run command
     cmd = `#{command}`

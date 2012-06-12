@@ -63,6 +63,11 @@ In this example, */chroot-1/* is used for the chroot directory.
 
     zypper --root=/chroot-1/ install suseRegister ca-certificates-cacert ca-certificates-mozilla yast2-trans-en_US openSUSE-build-key
 
+And if you want to test SLE-based system
+
+    zypper --root=/chroot-1/ rm openSUSE-build-key
+    zypper --root=/chroot-1/ install suse-build-key
+
 Then you need to import the GPG signing key (a - always trust) and accept the license (q - quit, y - yes).
 
 * suseRegister is needed for running registration in chroot
