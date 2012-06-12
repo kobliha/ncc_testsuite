@@ -50,7 +50,7 @@ In this example, */chroot-1/* is used for the chroot directory.
 ### Libzypp Repositories ###
 
     mkdir -pv /chroot-1/
-    zypper --root=/chroot-1/ ar --refresh http://download.opensuse.org/distribution/12.1/repo/oss/ openSUSE_12.1_OSS
+    zypper --root=/chroot-1/ --gpg-auto-import-keys ar --refresh http://download.opensuse.org/distribution/12.1/repo/oss/ openSUSE_12.1_OSS
 
 ### Prepare for Installation ###
 
