@@ -59,12 +59,12 @@ In this example, */chroot-1/* is used for the chroot directory.
 
 ### Installing the Base Software ####
 
-    zypper --no-gpg-checks --root=/chroot-1/ install suseRegister ca-certificates-cacert ca-certificates-mozilla yast2-trans-en_US openSUSE-build-key suse-build-key
+    zypper --no-gpg-checks --root=/chroot-1/ install suseRegister ca-certificates-cacert ca-certificates-mozilla yast2-trans-en_US openSUSE-build-key
 
 * suseRegister is needed for running registration in chroot
 * ca-certificates-cacert and ca-certificates-mozilla are needed for SSL communication
-* yast2-trans-en_US is some language package required by suseRegister (otherwise no repositories are returned from NU service) [bug or feature?]
-* openSUSE-build-key or suse-build-key contain GPG keys for SUSE/openSUSE repositories [bug or feature?]
+* yast2-trans-en_US is some language package required by suseRegister (otherwise no repositories are returned from NU service) [should be required by suseRegister? bug or feature?]
+* openSUSE-build-key contains GPG keys for SUSE repositories (alternatively can be replaced with suse-build-key) [should be required by suseRegister? bug or feature?]
 
 ### Prepare the Changed Root ###
 
