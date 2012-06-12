@@ -5,7 +5,7 @@ require "../lib/ncc_testsuite/chroot"
 
 repositories = ARGV.last(ARGV.size - 1)
 if repositories == [] or repositories == nil
-  puts "These repositories can be used for installation:\n" + $config['Repos'].keys.join("\n")
+  puts "These repositories can be used for installation:\n" + $config['Repos'].keys.sort.join("\n")
   exit 1
 end
 
