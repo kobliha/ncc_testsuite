@@ -7,6 +7,8 @@ class NccTestsuite::Chroot
   require 'ncc_testsuite/zypper'
   require 'ncc_testsuite/config'
 
+  RPM_DB = '/var/lib/rpm/Packages'
+
   def self.create chroot_dir
     check_dir chroot_dir
     create_chroot_dir chroot_dir
@@ -17,6 +19,7 @@ class NccTestsuite::Chroot
     import_gpg_keys
     mount_directories
     install_required_packages
+    rebuild_rpm_database
     polish
     puts "Done"
   end
@@ -59,7 +62,7 @@ class NccTestsuite::Chroot
   end
 
    def self.mount_directories
-     ['/proc', '/dev'].each do |directory|
+     ['/proc', '/dev', '/sys'].each do |directory|
        bind_mount directory, File.join(NccTestsuite::root_directory, directory)
      end
    end
@@ -105,6 +108,18 @@ class NccTestsuite::Chroot
     rescue Exception => e
       raise "Cannot copy #{from} to #{to}: #{e.message}"
     end
+  end
+
+  def self.rebuild_rpm_database
+    rpm_db_file = File.join(NccTestsuite::root_directory, RPM_DB)
+
+    begin
+      File.unlink rpm_db_file if File.exists? rpm_db_file
+    rescue Exception => e
+      raise "Cannot remove file #{rpm_db_file}: #{e.message}"
+    end
+
+    cmd "chroot #{NccTestsuite::escaped_root_director} rpm --rebuilddb"
   end
 
   def self.cmd command
