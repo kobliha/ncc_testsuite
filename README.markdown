@@ -53,8 +53,7 @@ In this example, */chroot-1/* is used for the chroot directory.
 
 ### Installing the Base Software ####
 
-    zypper install --root=/chroot-1/ suseRegister
-    zypper install --root=/chroot-1/ ca-certificates-cacert ca-certificates-mozilla
+    zypper --root=/chroot-1/ install suseRegister ca-certificates-cacert ca-certificates-mozilla
 
 ### Prepare the Changed Root ###
 
