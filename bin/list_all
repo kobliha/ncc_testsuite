@@ -16,6 +16,6 @@ puts "====================="
 puts NccTestsuite::Zypper::list_services.collect{|service| service["name"]}.sort
 
 puts
-puts "All needed patches:"
-puts "==================="
-puts NccTestsuite::Zypper::list_patches('status' => 'Needed').inspect
+puts "All patches:"
+puts "============"
+puts NccTestsuite::Zypper::list_patches.size
