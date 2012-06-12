@@ -2,12 +2,23 @@ class NccTestsuite::Chroot
   require 'rubygems'
   require 'fileutils'
   require 'shellwords'
+  require 'ftools'
 
   require 'ncc_testsuite/zypper'
+  require 'ncc_testsuite/config'
 
-  def self.prepare(chroot_dir, repositories)
+  def self.create chroot_dir
     check_dir chroot_dir
     create_chroot_dir chroot_dir
+  end
+
+  def self.prepare(chroot_dir, repositories)
+    add_repositories repositories
+    import_gpg_keys
+    mount_directories
+    install_required_packages
+    polish
+    puts "Done"
   end
 
   private
@@ -29,6 +40,75 @@ class NccTestsuite::Chroot
     rescue Exception => e
       raise "Cannot create directory #{chroot_dir}: #{e.message}"
     end
+  end
+
+  def self.add_repositories repositories
+    repositories.each do |repo_alias|
+      unless $config['Repos'][repo_alias]
+        raise "Unknown repository #{repo_alias}, check your config file"
+      end
+
+      puts "Adding repository #{repo_alias}"
+      NccTestsuite::Zypper::add_repository $config['Repos'][repo_alias], repo_alias
+    end
+  end
+
+  def self.import_gpg_keys
+    puts "Refreshing and importing all keys..."
+    NccTestsuite::Zypper::auto_import_keys
+  end
+
+   def self.mount_directories
+     ['/proc', '/dev'].each do |directory|
+       bind_mount directory, File.join(NccTestsuite::root_directory, directory)
+     end
+   end
+
+  def self.bind_mount original_dir, new_dir
+    unless File.exists? new_dir
+      puts "Creating directory #{new_dir}"
+      Dir.mkdir new_dir
+    end
+
+    puts "Mounting #{original_dir} as #{new_dir}"
+    cmd "mount --bind #{Shellwords::escape(original_dir)} #{Shellwords::escape(new_dir)}"
+  end
+
+  def self.install_required_packages
+    required_packages = $config['Global']['required_packages'] || ""
+    unless required_packages
+      raise "No required packages are defined"
+    end
+
+    puts "Installing required packages: #{required_packages}"
+    NccTestsuite::Zypper::install_packages required_packages.split
+  end
+
+  def self.polish
+    ['/etc/resolv.conf'].each do |file|
+      hardlink_file = File.join(NccTestsuite::root_directory, file)
+
+      begin
+        File.unlink hardlink_file if File.exists? hardlink_file
+        File.link file, hardlink_file
+      rescue Exception => e
+        # Cannot hardlink, let's copy the file
+        puts "Cannot hardlink #{file} -> #{hardlink_file}: #{e.message}"
+        copy file, hardlink_file
+      end
+    end
+  end
+
+  def self.copy from, to
+    begin
+      cmd "cp #{Shellwords::escape(from)} #{Shellwords::escape(to)}"
+    rescue Exception => e
+      raise "Cannot copy #{from} to #{to}: #{e.message}"
+    end
+  end
+
+  def self.cmd command
+    `#{command}`
   end
 
 end

@@ -4,39 +4,16 @@ class NccTestsuite::SuseRegister
   require 'fileutils'
   require 'shellwords'
 
+  require 'ncc_testsuite/config'
+
   SUSE_REGISTER_CONF = '/etc/zypp/credentials.d/NCCcredentials'
   DEFAULT_CONFIG_FILE = '/etc/ncc_registration.conf'
   LOG_FILE = '/var/log/suse_register'
   DEFAULT_LOCALE = 'en_US'
 
-  def initialize(config_file = nil)
-    # The default config file is used always if exists on a system
-    if File.exists?(DEFAULT_CONFIG_FILE)
-      config_file = DEFAULT_CONFIG_FILE
-    end
-
-    unless File.exist? config_file
-      raise IOError, "Cannot load #{config_file} config file: File does not exist"
-    end
-
-    begin
-      puts "Loading configuration from #{config_file}"
-      config = IniFile.load(config_file)
-    rescue RuntimeError => e
-      raise "Unable to read and parse configuration file #{config_file}: #{e.message}"
-    end
-
-    @config = {}
-
-    config.each do |section, key, value|
-      @config[section] ||= {}
-      @config[section].merge!(config[section])
-    end
-  end
-
-  def register
-    email = "-a email=" + Shellwords::escape(@config["Global"]["email"])
-    regcodes = @config["RegCodes"].collect{|key, value|
+  def self.register
+    email = "-a email=" + Shellwords::escape($config["Global"]["email"])
+    regcodes = $config["RegCodes"].collect{|key, value|
       "-a " + Shellwords::escape(key) + "=" + Shellwords::escape(value)
     }.join(" ")
     cmd = "suse_register --restore-repos --force-registration #{email} #{regcodes} --log #{Shellwords::escape(LOG_FILE)} --locale=#{DEFAULT_LOCALE}"

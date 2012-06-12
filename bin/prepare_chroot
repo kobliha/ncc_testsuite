@@ -1,0 +1,18 @@
+#!/usr/bin/ruby
+
+require "../lib/ncc_testsuite"
+require "../lib/ncc_testsuite/chroot"
+
+repositories = ARGV.last(ARGV.size - 1)
+if repositories == [] or repositories == nil
+  puts "These repositories can be used for installation:\n" + $config['Repos'].keys.join("\n")
+  exit 1
+end
+
+new_root_directory = ARGV[0]
+
+NccTestsuite::Chroot::create new_root_directory
+NccTestsuite::root_directory = new_root_directory
+
+puts "Using repositories #{repositories.inspect}"
+NccTestsuite::Chroot::prepare new_root_directory, repositories

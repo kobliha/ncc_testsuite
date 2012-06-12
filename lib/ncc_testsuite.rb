@@ -18,7 +18,6 @@ class NccTestsuite
       puts "Using changed root dir #{root_dir}"
     end
 
-
     unless File.exists? root_dir
       raise "Directory #{root_dir} doesn't exist"
     end

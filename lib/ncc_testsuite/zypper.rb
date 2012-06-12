@@ -25,8 +25,18 @@ class NccTestsuite::Zypper
     run("zypper #{global_options} --quiet clean")
   end
 
-  def self.add_repository repository_name
-    
+  def self.add_repository repository_url, repository_alias
+    run("zypper #{global_options} --quiet --gpg-auto-import-keys addrepo --refresh #{Shellwords::escape(repository_url)} #{Shellwords::escape(repository_alias)}")
+  end
+
+  def self.auto_import_keys
+    run("zypper #{global_options} --quiet --gpg-auto-import-keys refresh")
+  end
+
+  def self.install_packages packages
+    escaped_packages = packages.collect{|package| Shellwords::escape(package)}.join(" ")
+
+    run("zypper #{global_options} --quiet install --auto-agree-with-licenses #{escaped_packages}")
   end
 
   # Removes all repositories

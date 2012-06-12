@@ -62,7 +62,7 @@ In this example, */chroot-1/* is used for the chroot directory.
 
 ### Installing the Base Software ####
 
-    zypper --non-interactive --root=/chroot-1/ install --auto-agree-with-licenses suseRegister ca-certificates-cacert ca-certificates-mozilla yast2-trans-en_US openSUSE-build-key
+    zypper --non-interactive --root=/chroot-1/ install --auto-agree-with-licenses suseRegister yast2-trans-en_US suse-build-key openssl-certs
 
 * suseRegister is needed for running registration in chroot
 * ca-certificates-cacert and ca-certificates-mozilla are needed for SSL communication
