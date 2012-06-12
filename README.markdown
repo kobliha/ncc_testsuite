@@ -14,20 +14,20 @@ This is a small project for testing the current NCC setup.
 
 ## Scripts in /bin/ directory ##
 
-### cleanup ###
+### cleanup [chroot_dir] ###
 
 Prepares the system to a 'clean' state. All previous registrations are removed
 by deleting NCC Credentials.
 
-### install_products ###
+### install_products [chroot_dir] ###
 
 Installs some products into the system and marks one as the base one.
 
-### register ###
+### register [chroot_dir] ###
 
 Runs registration using /etc/suseRegister.conf and /etc/ncc_registration.conf
 
-### list_all ###
+### list_all [chroot_dir] ###
 
 Lists all currently used repositories, services and applicable patches.
 
@@ -59,7 +59,12 @@ In this example, */chroot-1/* is used for the chroot directory.
 
 ### Installing the Base Software ####
 
-    zypper --no-gpg-checks --root=/chroot-1/ install suseRegister ca-certificates-cacert ca-certificates-mozilla
+    zypper --no-gpg-checks --root=/chroot-1/ install suseRegister ca-certificates-cacert ca-certificates-mozilla yast2-trans-en_US openSUSE-build-key suse-build-key
+
+    * suseRegister is needed for running registration in chroot
+    * ca-certificates-cacert and ca-certificates-mozilla are needed for SSL communication
+    * yast2-trans-en_US is some language package required by suseRegister (otherwise no repositories are returned from NU service) [bug or feature?]
+    * openSUSE-build-key or suse-build-key contain GPG keys for SUSE/openSUSE repositories [bug or feature?]
 
 ### Prepare the Changed Root ###
 
