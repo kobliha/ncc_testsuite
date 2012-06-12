@@ -5,6 +5,8 @@ require "../lib/ncc_testsuite/zypper"
 require "../lib/ncc_testsuite/suse_register"
 require "../lib/ncc_testsuite/product"
 
+NccTestsuite::root_directory = ARGV[0]
+
 # Remove all services and repos, even all the disabled ones
 NccTestsuite::Zypper::cleanup
 

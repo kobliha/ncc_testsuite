@@ -8,16 +8,23 @@ class NccTestsuite::Product
   PRODUCT_DATA_SUFFIX = '.tgz'
   PRODUCT_SUFFIX = '.prod'
   BASE_PRODUCT = 'baseproduct'
-  BASEPRODUCT_FILE = File.join(PRODUCTS_DIR, BASE_PRODUCT)
+
+  def self.products_dir
+    File.join(NccTestsuite::root_directory, PRODUCTS_DIR)
+  end
+
+  def self.baseproduct_file
+    File.join(products_dir, BASE_PRODUCT)
+  end
 
   def self.installed_product_rpms
-    cmd = 'rpm -qa | grep release | grep -v release-notes'
+    cmd = "rpm --root #{NccTestsuite::escaped_root_directory} -qa | grep release | grep -v release-notes"
     out = run cmd
     out.split "\n"
   end
 
   def self.uninstall_rpm rpm
-    cmd = "rpm -e --nodeps " + Shellwords::escape(rpm)
+    cmd = "rpm --root #{NccTestsuite::escaped_root_directory} -e --nodeps " + Shellwords::escape(rpm)
     run cmd
   end
 
@@ -33,7 +40,7 @@ class NccTestsuite::Product
 
   # Removes all installed products (files)
   def self.remove_all_installed_products
-    Dir["#{PRODUCTS_DIR}/*"].each do |file|
+    Dir["#{products_dir}/*"].each do |file|
       begin
         FileUtils.rm_rf file
       rescue => e
@@ -57,35 +64,35 @@ class NccTestsuite::Product
     raise "Product #{product} is not available for installation" unless is_available?(product)
 
     puts "Installing product #{product}"
-    cmd = "tar --directory=/ -xvzf #{DATA_DIR}/#{product}#{PRODUCT_DATA_SUFFIX}"
+    cmd = "tar --directory=#{NccTestsuite::escaped_root_directory} -xvzf #{DATA_DIR}/#{product}#{PRODUCT_DATA_SUFFIX}"
     run cmd
   end
 
   def self.baseproduct_exists?
-    File.exists? BASEPRODUCT_FILE
+    File.exists? baseproduct_file
   end
 
   # Creates a base-product symlink
   def self.set_baseproduct product
     begin
       if baseproduct_exists?
-        puts "Removing old baseproduct file #{BASEPRODUCT_FILE}"
-        File.rm_rf BASEPRODUCT_FILE
+        puts "Removing old baseproduct file #{baseproduct_file}"
+        File.unlink baseproduct_file
       end
     rescue => e
-      raise "Unable to remove file  #{BASEPRODUCT_FILE}: #{e.message}"
+      raise "Unable to remove file  #{baseproduct_file}: #{e.message}"
     end
 
-    product_file = File.join(PRODUCTS_DIR, "#{product}#{PRODUCT_SUFFIX}")
+    product_file = File.join(products_dir, "#{product}#{PRODUCT_SUFFIX}")
 
     unless File.exists? product_file
       raise "Product file #{product_file} does not exist, cannot create baseproduct"
     end
 
     begin
-      File.symlink(product_file, BASEPRODUCT_FILE)
+      File.symlink(product_file, baseproduct_file)
     rescue => e
-      raise "Cannot create base product file #{BASEPRODUCT_FILE} from #{product_file}: #{e.message}"
+      raise "Cannot create base product file #{baseproduct_file} from #{product_file}: #{e.message}"
     end
   end
 

@@ -42,16 +42,33 @@ class NccTestsuite::SuseRegister
     puts NccTestsuite::SuseRegister::run(cmd)
   end
 
+  def self.config_file
+    File.join(NccTestsuite::root_directory, SUSE_REGISTER_CONF)
+  end
+
   def self.cleanup
-    if File.exists?(SUSE_REGISTER_CONF)
-      puts "Removing #{SUSE_REGISTER_CONF}"
-      FileUtils.rm SUSE_REGISTER_CONF
+    if File.exists?(config_file)
+      puts "Removing #{config_file}"
+      FileUtils.rm config_file
     end
   end
 
   private
 
+  def self.make_chrooted cmd
+    if NccTestsuite::run_chrooted?
+      "chroot #{NccTestsuite::escaped_root_directory} #{cmd}"
+    else
+      cmd
+    end
+  end
+
   def self.run command
-    cmd = `#{command}`
+    begin
+        command = make_chrooted(command)
+        cmd = `#{command}`
+    rescue Exception => e
+      raise "Cannot chroot to #{NccTestsuite::root_directory}: #{e.message}"
+    end
   end
 end

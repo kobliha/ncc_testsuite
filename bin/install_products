@@ -3,8 +3,9 @@
 require "../lib/ncc_testsuite"
 require "../lib/ncc_testsuite/product"
 
+NccTestsuite::root_directory = ARGV[0]
+
 NccTestsuite::Product::install 'sles-release-11.2-1.513'
 NccTestsuite::Product::install 'sle-sdk-release-11.2-1.66'
-NccTestsuite::Product::install 'sle-studioonsite-release-1.1-1.3'
 
 NccTestsuite::Product::set_baseproduct 'SUSE_SLES'
