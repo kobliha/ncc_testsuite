@@ -74,25 +74,10 @@ class NccTestsuite::Product
 
   # Creates a base-product symlink
   def self.set_baseproduct product
-    begin
-      if baseproduct_exists?
-        puts "Removing old baseproduct file #{baseproduct_file}"
-        File.unlink baseproduct_file
-      end
-    rescue => e
-      raise "Unable to remove file  #{baseproduct_file}: #{e.message}"
-    end
-
-    product_file = File.join(products_dir, "#{product}#{PRODUCT_SUFFIX}")
-
-    unless File.exists? product_file
-      raise "Product file #{product_file} does not exist, cannot create baseproduct"
-    end
-
-    begin
-      File.symlink(product_file, baseproduct_file)
-    rescue => e
-      raise "Cannot create base product file #{baseproduct_file} from #{product_file}: #{e.message}"
+    chdir_products_dir = File.join(NccTestsuite::root_directory, PRODUCTS_DIR)
+    puts "Working on #{chdir_products_dir} base directory"
+    Dir.chdir(chdir_products_dir) do
+      set_baseproduct_chdired product
     end
   end
 
@@ -107,6 +92,30 @@ class NccTestsuite::Product
   end
 
   private
+
+  def self.set_baseproduct_chdired product
+    begin
+      if baseproduct_exists?
+        puts "Removing old baseproduct file #{baseproduct_file}"
+        File.unlink baseproduct_file
+      end
+    rescue => e
+      raise "Unable to remove file  #{baseproduct_file}: #{e.message}"
+    end
+
+    # We consider the product will be used in a chrooted environment
+    product_file = "#{product}#{PRODUCT_SUFFIX}"
+
+    unless File.exists? product_file
+      raise "Product file #{product_file} does not exist, cannot create baseproduct"
+    end
+
+    begin
+      File.symlink(product_file, baseproduct_file)
+    rescue => e
+      raise "Cannot create base product file #{baseproduct_file} from #{product_file}: #{e.message}"
+    end
+  end
 
   def self.run command
     cmd = `#{command}`
