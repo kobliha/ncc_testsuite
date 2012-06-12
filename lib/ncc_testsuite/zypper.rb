@@ -25,6 +25,10 @@ class NccTestsuite::Zypper
     run("zypper #{global_options} --quiet clean")
   end
 
+  def self.add_repository repository_name
+    
+  end
+
   # Removes all repositories
   #
   # @returns boolean whether successful 

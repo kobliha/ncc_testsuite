@@ -43,7 +43,7 @@ class NccTestsuite::Product
     Dir["#{products_dir}/*"].each do |file|
       begin
         FileUtils.rm_rf file
-      rescue => e
+      rescue Exception => e
         raise "Unable to remove file  #{file}: #{e.message}"
       end
     end

@@ -2,6 +2,11 @@ class NccTestsuite
   require 'fileutils'
   require 'shellwords'
 
+  # For running the library from git checkout
+  unless $LOAD_PATH.include? File.dirname(__FILE__)
+    $LOAD_PATH << File.dirname(__FILE__)
+  end
+
   DEFAULT_ROOT_DIR = '/'
 
   @@root_directory = DEFAULT_ROOT_DIR
