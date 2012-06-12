@@ -51,6 +51,7 @@ In this example, */chroot-1/* is used for the chroot directory.
 
     mkdir -pv /chroot-1/
     zypper --root=/chroot-1/ --gpg-auto-import-keys ar --refresh http://download.opensuse.org/distribution/12.1/repo/oss/ openSUSE_12.1_OSS
+    zypper --non-interactive --root=/chroot-1/ --gpg-auto-import-keys ref
 
 ### Prepare for Installation ###
 
@@ -61,14 +62,7 @@ In this example, */chroot-1/* is used for the chroot directory.
 
 ### Installing the Base Software ####
 
-    zypper --root=/chroot-1/ install suseRegister ca-certificates-cacert ca-certificates-mozilla yast2-trans-en_US openSUSE-build-key
-
-And if you want to test SLE-based system
-
-    zypper --root=/chroot-1/ rm openSUSE-build-key
-    zypper --root=/chroot-1/ install suse-build-key
-
-Then you need to import the GPG signing key (a - always trust) and accept the license (q - quit, y - yes).
+    zypper --non-interactive --root=/chroot-1/ install --auto-agree-with-licenses suseRegister ca-certificates-cacert ca-certificates-mozilla yast2-trans-en_US openSUSE-build-key
 
 * suseRegister is needed for running registration in chroot
 * ca-certificates-cacert and ca-certificates-mozilla are needed for SSL communication
