@@ -13,6 +13,18 @@ class NccTestsuite::Zypper
     xml_run('services')["service-list"][0]["service"] || []
   end
 
+  def self.refresh_services
+    run("zypper --root=#{NccTestsuite::escaped_root_directory} --non-interactive --quiet refresh-services")
+  end
+
+  def self.refresh_repositories
+    run("zypper --root=#{NccTestsuite::escaped_root_directory} --non-interactive --quiet refresh")
+  end
+
+  def self.clean_caches
+    run("zypper --root=#{NccTestsuite::escaped_root_directory} --non-interactive --quiet clean")
+  end
+
   # Removes all repositories
   #
   # @returns boolean whether successful 

@@ -56,10 +56,14 @@ In this example, */chroot-1/* is used for the chroot directory.
 
     mkdir -pv /chroot-1/proc
     mount --bind /proc/ /chroot-1/proc/
+    mkdir -pv /chroot-1/dev
+    mount --bind /dev/ /chroot-1/dev/
 
 ### Installing the Base Software ####
 
-    zypper --no-gpg-checks --root=/chroot-1/ install suseRegister ca-certificates-cacert ca-certificates-mozilla yast2-trans-en_US openSUSE-build-key
+    zypper --root=/chroot-1/ install suseRegister ca-certificates-cacert ca-certificates-mozilla yast2-trans-en_US openSUSE-build-key
+
+Then you need to import the GPG signing key (a - always trust) and accept the license (q - quit, y - yes).
 
 * suseRegister is needed for running registration in chroot
 * ca-certificates-cacert and ca-certificates-mozilla are needed for SSL communication
