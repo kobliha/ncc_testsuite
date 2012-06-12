@@ -6,6 +6,7 @@ class NccTestsuite::SuseRegister
 
   SUSE_REGISTER_CONF = '/etc/zypp/credentials.d/NCCcredentials'
   DEFAULT_CONFIG_FILE = '/etc/ncc_registration.conf'
+  LOG_FILE = '/var/log/suse_register'
 
   def initialize(config_file = nil)
     # The default config file is used always if exists on a system
@@ -37,7 +38,7 @@ class NccTestsuite::SuseRegister
     regcodes = @config["RegCodes"].collect{|key, value|
       "-a " + Shellwords::escape(key) + "=" + Shellwords::escape(value)
     }.join(" ")
-    cmd = "suse_register --restore-repos --force-registration #{email} #{regcodes}"
+    cmd = "suse_register --restore-repos --force-registration #{email} #{regcodes} -L #{LOG_FILE}"
     puts "Registering system..."
     puts NccTestsuite::SuseRegister::run(cmd)
   end
