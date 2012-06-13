@@ -14,29 +14,29 @@ class NccTestsuite::Zypper
   end
 
   def self.refresh_services
-    run("zypper #{global_options} --quiet refresh-services")
+    run("#{chroot} zypper #{global_options} --gpg-auto-import-keys --quiet refresh-services")
   end
 
   def self.refresh_repositories
-    run("zypper #{global_options} --quiet refresh")
+    run("#{chroot} zypper #{global_options} --gpg-auto-import-keys --quiet refresh")
   end
 
   def self.clean_caches
-    run("zypper #{global_options} --quiet clean")
+    run("#{chroot} zypper #{global_options} --quiet clean")
   end
 
   def self.add_repository repository_url, repository_alias
-    run("zypper #{global_options} --quiet --gpg-auto-import-keys addrepo --refresh #{Shellwords::escape(repository_url)} #{Shellwords::escape(repository_alias)}")
+    run("#{chroot} zypper #{global_options} --quiet --gpg-auto-import-keys addrepo --refresh #{Shellwords::escape(repository_url)} #{Shellwords::escape(repository_alias)}")
   end
 
   def self.auto_import_keys
-    run("zypper #{global_options} --quiet --gpg-auto-import-keys refresh")
+    run("#{chroot} zypper #{global_options} --quiet --gpg-auto-import-keys refresh")
   end
 
   def self.install_packages packages
     escaped_packages = packages.collect{|package| Shellwords::escape(package)}.join(" ")
 
-    run("zypper #{global_options} --quiet install --auto-agree-with-licenses #{escaped_packages}")
+    run("#{chroot} zypper #{global_options} --quiet install --auto-agree-with-licenses #{escaped_packages}")
   end
 
   # Removes all repositories
@@ -48,7 +48,7 @@ class NccTestsuite::Zypper
 
     repositories.each {|repo|
       puts "Removing repository '#{repo["alias"]}'"
-      run("zypper #{global_options} --quiet removerepo " + Shellwords::escape(repo["alias"]))
+      run("#{chroot} zypper #{global_options} --quiet removerepo " + Shellwords::escape(repo["alias"]))
     }
 
     # Check and return whether all repositories have been removed
@@ -65,7 +65,7 @@ class NccTestsuite::Zypper
 
     services.each {|service|
       puts "Removing service '#{service["alias"]}'"
-      run("zypper #{global_options} --quiet removeservice " + Shellwords::escape(service["alias"]))
+      run("#{chroot} zypper #{global_options} --quiet removeservice " + Shellwords::escape(service["alias"]))
     }
 
     # Check and return whether all services have been removed
@@ -92,7 +92,7 @@ class NccTestsuite::Zypper
     patch = {}
 
     # Zypper `patches` does not support XML output
-    run("zypper #{global_options} --quiet patches").split("\n").each {|line|
+    run("#{chroot} zypper #{global_options} --quiet patches").split("\n").each {|line|
       table_index = table_index + 1
       # Skip the first two - table header
       next if table_index < 3
@@ -116,7 +116,7 @@ class NccTestsuite::Zypper
   end
 
   def self.xml_run command
-    command = "zypper #{global_options} --xmlout #{command}"
+    command = "#{chroot} zypper #{global_options} --xmlout #{command}"
     xml = run command
     out = XmlSimple.xml_in(xml)
 
@@ -131,8 +131,16 @@ class NccTestsuite::Zypper
 
   private
 
+  def self.chroot
+    if NccTestsuite::run_chrooted?
+      "chroot #{NccTestsuite::escaped_root_directory} "
+    else
+      ""
+    end
+  end
+
   def self.global_options
-    " --gpg-auto-import-keys --root=#{NccTestsuite::escaped_root_directory} --non-interactive "
+    " --gpg-auto-import-keys --non-interactive "
   end
 
   def self.run command
