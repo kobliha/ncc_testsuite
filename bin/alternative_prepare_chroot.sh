@@ -10,8 +10,9 @@ CHROOT=$1
 URL=$2
 ALIAS=$3
 
-BASIC_RPMS="zypper suse-build-key openssl-certs util-linux coreutils"
-FINAL_RPMS="suseRegister yast2-trans-en_US suse-build-key openssl-certs util-linux"
+BASIC_RPMS="util-linux coreutils zypper suse-build-key"
+FINAL_RPMS="suseRegister suse-build-key util-linux yast2-trans-en_US"
+OPTIONAL_RPMS="openssl-certs"
 RPM_DB_DIR="/var/lib/rpm/"
 PACKAGES_LIST="/zypper-packages-to-install"
 COPY_FILES="/etc/resolv.conf /etc/hosts /etc/localtime"
@@ -63,6 +64,7 @@ chroot ${CHROOT} zypper --non-interactive --gpg-auto-import-keys refresh --force
 
 # Install the rest of packages
 chroot ${CHROOT} zypper --non-interactive install --auto-agree-with-licenses --force ${FINAL_RPMS}
+chroot ${CHROOT} zypper --non-interactive install --auto-agree-with-licenses --force ${OPTIONAL_RPMS}
 
 chroot ${CHROOT} c_rehash > /dev/null
 
