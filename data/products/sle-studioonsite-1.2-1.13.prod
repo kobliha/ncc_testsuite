@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<product id="sle-11-studioonsite" schemeversion="0">
+  <vendor>SUSE LINUX Products GmbH, Nuernberg, Germany</vendor>
+  <name>sle-studioonsite</name>
+  <version>1.2</version>
+  <patchlevel>0</patchlevel>
+  <release>1.13</release>
+  <arch>x86_64</arch>
+  <productline>studio</productline>
+  <register>
+    <target>sle-11-x86_64</target>
+    <release></release>
+    <repositories>
+      <repository path="obs://build.suse.de/SUSE:SLE-11-SP1:Update:ATK:1.2/standard" />
+      <repository path="obs://build.suse.de/SUSE:SLE-11-SP1:Update/standard" />
+      <repository path="obs://build.suse.de/SUSE:SLE-11-SP1:GA/standard" />
+      <repository path="obs://build.suse.de/SUSE:SLE-11:Update/standard" />
+      <repository path="obs://build.suse.de/SUSE:SLE-11:GA/standard" />
+    </repositories>
+  </register>
+  <upgrades />
+  <summary>SUSE Studio Onsite</summary>
+  <description>SUSE Studio Onsite appliance</description>
+  <urls>
+    <url name="bugtracker">https://bugzilla.novell.com/</url>
+    <url name="releasenotes">http://www.novell.com/linux/releasenotes/x86_64/SLE-STUDIOONSITE/1.2/release-notes-studioonsite.rpm</url>
+  </urls>
+  <buildconfig>
+    <producttheme>SLES</producttheme>
+  </buildconfig>
+  <installconfig>
+    <defaultlang>en_US</defaultlang>
+    <datadir>suse</datadir>
+    <descriptiondir>suse/setup/descr</descriptiondir>
+    <releasepackage name="sle-studioonsite-release" flag="EQ" version="1.2" release="1.13" />
+    <distribution>SUSE_SLE</distribution>
+  </installconfig>
+  <runtimeconfig />
+</product>
+

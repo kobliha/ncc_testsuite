@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<product id="sle-11-server" schemeversion="0">
+  <vendor>SUSE LINUX Products GmbH, Nuernberg, Germany</vendor>
+  <name>SUSE_SLES</name>
+  <version>11.1</version>
+  <baseversion>11</baseversion>
+  <patchlevel>1</patchlevel>
+  <release>1.205</release>
+  <arch>x86_64</arch>
+  <productline>sles</productline>
+  <register>
+    <target>sle-11-x86_64</target>
+    <release></release>
+    <repositories>
+      <repository path="obs://build.suse.de/SUSE:SLE-11-SP1:GA/standard" />
+      <repository path="obs://build.suse.de/SUSE:SLE-11:Update/snapshot-SP1" />
+      <repository path="obs://build.suse.de/SUSE:SLE-11:GA/standard" />
+    </repositories>
+  </register>
+  <upgrades>
+    <upgrade>
+      <name>SUSE_SLES-SP2-migration</name>
+      <summary>SUSE Linux Enterprise Server 11 SP2</summary>
+      <product>SUSE_SLES-SP2-migration</product>
+      <notify>true</notify>
+      <status>stable</status>
+    </upgrade>
+  </upgrades>
+  <updaterepokey>A43242DKD</updaterepokey>
+  <summary>SUSE Linux Enterprise Server 11 SP1</summary>
+  <shortsummary>SLES11_SP1</shortsummary>
+  <description>SUSE Linux Enterprise offers a comprehensive
+        suite of products built on a single code base.
+        The platform addresses business needs from
+        the smallest thin-client devices to the world’s
+        most powerful high-performance computing
+        and mainframe servers. SUSE Linux Enterprise
+        offers common management tools and technology
+        certifications across the platform, and
+        each product is enterprise-class.</description>
+  <linguas>
+    <language>cs</language>
+    <language>da</language>
+    <language>de</language>
+    <language>en</language>
+    <language>en_GB</language>
+    <language>en_US</language>
+    <language>es</language>
+    <language>fi</language>
+    <language>fr</language>
+    <language>hu</language>
+    <language>it</language>
+    <language>ja</language>
+    <language>nb</language>
+    <language>nl</language>
+    <language>pl</language>
+    <language>pt</language>
+    <language>pt_BR</language>
+    <language>ru</language>
+    <language>sv</language>
+    <language>zh</language>
+    <language>zh_CN</language>
+    <language>zh_TW</language>
+  </linguas>
+  <urls>
+    <url name="releasenotes">http://www.novell.com/linux/releasenotes/x86_64/SUSE-SLES/11-SP1/release-notes-sles.rpm</url>
+    <url name="smolt">http://smolt.novell.com/register.pl</url>
+    <url name="register">http://register.novell.com/</url>
+  </urls>
+  <buildconfig>
+    <producttheme>SLES</producttheme>
+  </buildconfig>
+  <installconfig>
+    <defaultlang>en_US</defaultlang>
+    <datadir>suse</datadir>
+    <descriptiondir>suse/setup/descr</descriptiondir>
+    <releasepackage name="sles-release" flag="EQ" version="11.1" release="1.205" />
+    <distribution>SUSE_SLE</distribution>
+  </installconfig>
+  <runtimeconfig />
+</product>
+

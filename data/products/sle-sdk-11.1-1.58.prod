@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<product id="sle-11-sdk" schemeversion="0">
+  <vendor>SUSE LINUX Products GmbH, Nuernberg, Germany</vendor>
+  <name>sle-sdk</name>
+  <version>11.1</version>
+  <baseversion>11</baseversion>
+  <patchlevel>1</patchlevel>
+  <release>1.58</release>
+  <arch>x86_64</arch>
+  <productline>sle</productline>
+  <register>
+    <target>sle-11-x86_64</target>
+    <release></release>
+    <repositories>
+      <repository path="obs://build.suse.de/SUSE:SLE-11-SP1:GA/standard" />
+      <repository path="obs://build.suse.de/SUSE:SLE-11:Update/snapshot-SP1" />
+      <repository path="obs://build.suse.de/SUSE:SLE-11:GA/standard" />
+    </repositories>
+  </register>
+  <upgrades>
+    <upgrade>
+      <name>sle-sdk-SP2-migration</name>
+      <summary>SUSE Linux Enterprise Software Development Kit 11 SP2</summary>
+      <product>sle-sdk-SP2-migration</product>
+      <notify>true</notify>
+      <status>stable</status>
+    </upgrade>
+  </upgrades>
+  <summary>SUSE Linux Enterprise Software Development Kit 11 SP1</summary>
+  <description>This is the SUSE Linux Enterprise Software Development Kit</description>
+  <urls>
+    <url name="bugtracker">https://bugzilla.novell.com/</url>
+  </urls>
+  <buildconfig>
+    <producttheme>SLES</producttheme>
+  </buildconfig>
+  <installconfig>
+    <defaultlang>en_US</defaultlang>
+    <datadir>suse</datadir>
+    <descriptiondir>suse/setup/descr</descriptiondir>
+    <releasepackage name="sle-sdk-release" flag="EQ" version="11.1" release="1.58" />
+    <distribution>SUSE_SDK</distribution>
+  </installconfig>
+  <runtimeconfig />
+</product>
+

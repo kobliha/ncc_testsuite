@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<product id="sle-11-SP1-WebYaST" schemeversion="0">
+  <vendor>SUSE LINUX Products GmbH, Nuernberg, Germany</vendor>
+  <name>sle-11-SP1-WebYaST</name>
+  <version>1.0</version>
+  <patchlevel>0</patchlevel>
+  <release>1.4</release>
+  <arch>x86_64</arch>
+  <productline>webyast</productline>
+  <register>
+    <target>sle-11-SP1-x86_64</target>
+    <release></release>
+    <repositories>
+      <repository path="obs://build.suse.de/SUSE:SLE-11-SP1:GA/standard" />
+      <repository path="obs://build.suse.de/SUSE:SLE-11:Update/snapshot-SP1" />
+      <repository path="obs://build.suse.de/SUSE:SLE-11:GA/standard" />
+    </repositories>
+  </register>
+  <upgrades />
+  <summary>WebYaST for SLE-11</summary>
+  <description>WebYaST for SLE-11</description>
+  <urls>
+    <url name="bugtracker">https://bugzilla.novell.com/</url>
+    <url name="releasenotes">http://www.novell.com/linux/releasenotes/x86_64/SLE-WEBYAST/1.0/release-notes-webyast.rpm</url>
+  </urls>
+  <buildconfig>
+    <producttheme>SLES</producttheme>
+  </buildconfig>
+  <installconfig>
+    <defaultlang>en_US</defaultlang>
+    <datadir>suse</datadir>
+    <descriptiondir>suse/setup/descr</descriptiondir>
+    <releasepackage name="sle-11-SP1-WebYaST-release" flag="EQ" version="11" release="1.4" />
+    <distribution>SUSE_SLE</distribution>
+  </installconfig>
+  <runtimeconfig />
+</product>
+

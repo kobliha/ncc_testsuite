@@ -5,7 +5,6 @@ class NccTestsuite::Product
 
   PRODUCTS_DIR = '/etc/products.d/'
   DATA_DIR = File.join(File.dirname(__FILE__),"../../data/products/")
-  PRODUCT_DATA_SUFFIX = '.tgz'
   PRODUCT_SUFFIX = '.prod'
   BASE_PRODUCT = 'baseproduct'
 
@@ -51,7 +50,7 @@ class NccTestsuite::Product
 
   # List all product available for installation
   def self.available_products
-    Dir["#{DATA_DIR}/*#{PRODUCT_DATA_SUFFIX}"].collect{|product| File.basename(product, PRODUCT_DATA_SUFFIX)}
+    Dir["#{DATA_DIR}/*#{PRODUCT_SUFFIX}"].collect{|product| File.basename(product, PRODUCT_SUFFIX)}
   end
 
   # Returns whether a given product is available
@@ -63,8 +62,11 @@ class NccTestsuite::Product
   def self.install product
     raise "Product #{product} is not available for installation" unless is_available?(product)
 
+    data_file = File.join(DATA_DIR, "#{product}#{PRODUCT_SUFFIX}")
+    install_file = File.join(NccTestsuite::escaped_root_directory, PRODUCTS_DIR)
+
     puts "Installing product #{product}"
-    cmd = "tar --directory=#{NccTestsuite::escaped_root_directory} -xvzf #{DATA_DIR}/#{product}#{PRODUCT_DATA_SUFFIX}"
+    cmd = "cp #{Shellwords::escape(data_file)} #{Shellwords::escape(install_file)}"
     run cmd
   end
 
@@ -75,7 +77,6 @@ class NccTestsuite::Product
   # Creates a base-product symlink
   def self.set_baseproduct product
     chdir_products_dir = File.join(NccTestsuite::root_directory, PRODUCTS_DIR)
-    puts "Working on #{chdir_products_dir} base directory"
     Dir.chdir(chdir_products_dir) do
       set_baseproduct_chdired product
     end
@@ -102,6 +103,8 @@ class NccTestsuite::Product
     rescue => e
       raise "Unable to remove file  #{baseproduct_file}: #{e.message}"
     end
+
+    puts "Setting base product: #{product}"
 
     # We consider the product will be used in a chrooted environment
     product_file = "#{product}#{PRODUCT_SUFFIX}"

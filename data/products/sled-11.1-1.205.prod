@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<product id="sle-11-desktop" schemeversion="0">
+  <vendor>SUSE LINUX Products GmbH, Nuernberg, Germany</vendor>
+  <name>SUSE_SLED</name>
+  <version>11.1</version>
+  <baseversion>11</baseversion>
+  <patchlevel>1</patchlevel>
+  <release>1.205</release>
+  <arch>x86_64</arch>
+  <productline>sled</productline>
+  <register>
+    <target>sle-11-x86_64</target>
+    <release></release>
+    <repositories>
+      <repository path="obs://build.suse.de/SUSE:SLE-11-SP1:GA/standard" />
+      <repository path="obs://build.suse.de/SUSE:SLE-11:Update/snapshot-SP1" />
+      <repository path="obs://build.suse.de/SUSE:SLE-11:GA/standard" />
+    </repositories>
+  </register>
+  <upgrades>
+    <upgrade>
+      <name>SUSE_SLED-SP2-migration</name>
+      <summary>SUSE Linux Enterprise Desktop 11 SP2</summary>
+      <product>SUSE_SLED-SP2-migration</product>
+      <notify>true</notify>
+      <status>stable</status>
+    </upgrade>
+  </upgrades>
+  <updaterepokey>A43242FFF</updaterepokey>
+  <summary>SUSE Linux Enterprise Desktop 11 SP1</summary>
+  <shortsummary>SLED11_SP1</shortsummary>
+  <description>SUSE Linux Enterprise offers a comprehensive
+        suite of products built on a single code base.
+        The platform addresses business needs from
+        the smallest thin-client devices to the world’s
+        most powerful high-performance computing
+        and mainframe servers. SUSE Linux Enterprise
+        offers common management tools and technology 
+        certifications across the platform, and
+        each product is enterprise-class. SUSE Linux
+        Enterprise provides more than a cute desktop
+        product or a basic server offering. It is the
+        only Linux platform for enterprise computing,
+        and it is now replacing UNIX* and Windows*
+        as well.</description>
+  <linguas>
+    <language>cs</language>
+    <language>da</language>
+    <language>de</language>
+    <language>en</language>
+    <language>en_GB</language>
+    <language>en_US</language>
+    <language>es</language>
+    <language>fi</language>
+    <language>fr</language>
+    <language>hu</language>
+    <language>it</language>
+    <language>ja</language>
+    <language>nb</language>
+    <language>nl</language>
+    <language>pl</language>
+    <language>pt</language>
+    <language>pt_BR</language>
+    <language>ru</language>
+    <language>sv</language>
+    <language>zh</language>
+    <language>zh_CN</language>
+    <language>zh_TW</language>
+  </linguas>
+  <urls>
+    <url name="releasenotes">http://www.novell.com/linux/releasenotes/x86_64/SUSE-SLED/11-SP1/release-notes-sled.rpm</url>
+    <url name="register">http://register.novell.com/</url>
+  </urls>
+  <buildconfig>
+    <producttheme>SLED</producttheme>
+    <allowresolving>false</allowresolving>
+  </buildconfig>
+  <installconfig>
+    <defaultlang>en_US</defaultlang>
+    <datadir>suse</datadir>
+    <descriptiondir>suse/setup/descr</descriptiondir>
+    <releasepackage name="sled-release" flag="EQ" version="11.1" release="1.205" />
+    <distribution>SUSE_SLE</distribution>
+  </installconfig>
+  <runtimeconfig />
+</product>
+
