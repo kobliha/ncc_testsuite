@@ -2,12 +2,13 @@
 
 require "../lib/ncc_testsuite"
 require "../lib/ncc_testsuite/chroot"
+require "../lib/ncc_testsuite/repository"
 
 if ARGV.size < 1
   puts "Syntax: #{__FILE__} /new-chroot-directory repository-alias [repository-alias [...]]"
   exit 1
 elsif ARGV.size < 2
-  puts "These repositories can be used for installation:\n" + $config['Repos'].keys.sort.join("\n")
+  puts "These repositories can be used for installation:\n" + NccTestsuite::Repository::all.join("\n")
   exit 1
 end
 

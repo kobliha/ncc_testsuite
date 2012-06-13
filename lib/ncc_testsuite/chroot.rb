@@ -6,6 +6,7 @@ class NccTestsuite::Chroot
 
   require 'ncc_testsuite/zypper'
   require 'ncc_testsuite/config'
+  require 'ncc_testsuite/repository'
 
   RPM_DB = '/var/lib/rpm/Packages'
 
@@ -47,12 +48,12 @@ class NccTestsuite::Chroot
 
   def self.add_repositories repositories
     repositories.each do |repo_alias|
-      unless $config['Repos'][repo_alias]
+      unless NccTestsuite::Repository::url(repo_alias)
         raise "Unknown repository #{repo_alias}, check your config file"
       end
 
       puts "Adding repository #{repo_alias}"
-      NccTestsuite::Zypper::add_repository $config['Repos'][repo_alias], repo_alias
+      NccTestsuite::Zypper::add_repository NccTestsuite::Repository::url(repo_alias), repo_alias
     end
   end
 
