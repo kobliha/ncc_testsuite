@@ -14,6 +14,13 @@ This is a small project for testing the current NCC setup.
 
 ## Scripts in /bin/ directory ##
 
+### prepare_chroot /chroot_directory repository [repository] ###
+
+Prepares a new chroot directory by installing the required packages downloaded
+from repositories given as parameters. Repositories are configured in
+/etc/ncc_registration.conf in Repos section (alias = URL). The new chroot
+repository must not exist.
+
 ### cleanup [chroot_dir] ###
 
 Prepares the system to a 'clean' state. All previous registrations are removed
