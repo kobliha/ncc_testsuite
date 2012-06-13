@@ -7,4 +7,3 @@ require "../lib/ncc_testsuite/zypper"
 NccTestsuite::root_directory = ARGV[0]
 
 NccTestsuite::SuseRegister::register
-NccTestsuite::Zypper::refresh_services
