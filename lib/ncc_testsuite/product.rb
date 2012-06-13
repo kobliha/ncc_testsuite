@@ -63,10 +63,18 @@ class NccTestsuite::Product
     raise "Product #{product} is not available for installation" unless is_available?(product)
 
     data_file = File.join(DATA_DIR, "#{product}#{PRODUCT_SUFFIX}")
-    install_file = File.join(NccTestsuite::escaped_root_directory, PRODUCTS_DIR)
+    install_dir = File.join(NccTestsuite::escaped_root_directory, PRODUCTS_DIR)
+
+    unless File.exists? install_dir
+      begin
+        Dir.mkdir install_dir
+      rescue Exception => e
+        raise "Cannot create directory #{install_dir}: #{e.message}"
+      end
+    end
 
     puts "Installing product #{product}"
-    cmd = "cp #{Shellwords::escape(data_file)} #{Shellwords::escape(install_file)}"
+    cmd = "cp #{Shellwords::escape(data_file)} #{Shellwords::escape(install_dir)}"
     run cmd
   end
 
